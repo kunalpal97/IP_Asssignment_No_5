@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Basic Calculator & Generate Prime and Square Of Number</title>
+    <style>
+      body {
+        font-family: 'Poppins', sans-serif;
+        text-align: center;
+        justify-content: center;
+        
+      }
+
+      .container {
+        display: flex;
+        
+        justify-content: center;
+        text-align: center;
+      }
+
+      .section {
+        border: 2px 2px 4px solid #831717;
+        padding: 20px;
+        border-radius: 10px;
+        width: 50%;
+        box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
+        margin: 8px;  
+      }
+
+      h1 {
+        color: yellow;
+        background-color: black;
+        border-radius: 15px;
+        box-shadow: 2px 5px 6px 8px rgb(89, 144, 89);
+        animation-name: move;
+        margin-bottom: 60px;
+        padding: 30px;
+        animation-duration: 4s;
+        animation-iteration-count: infinite;
+        animation-delay: 0.2; 
+      }
+      @keyframes move{
+        0%{
+          transform: translate(20px);
+        }
+
+        100%{
+          transform: translate(-20px);
+        }
+      }
+      h2{
+        background-color: aquamarine;
+        border-radius: 20px;
+        border: 2px solid;
+        box-shadow: 5px 6px 6px red;
+        margin-top:30px;
+        padding: 10px;
+        font-size: 2rem;
+        padding: 8px 20px;
+        transition: 0.5s ease;
+      }
+      h2:hover{
+
+        cursor: pointer;
+        color: rgb(255, 255, 255);
+        background-color: rgb(102, 33, 33);
+        transition: 0.2s ;
+        transform: translateY(-10px);
+
+      }
+      input {
+        width: 100px;
+        margin: 5px;
+        background: transparent;
+        background-color: rgb(223, 211, 188); 
+      }
+      input:active{
+        background-color: #fff;
+      }
+
+      button {
+        margin: 5px;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+      }
+     
+      label:hover {
+
+        cursor: pointer;
+        color: rgb(205, 152, 77);
+      }
+
+      button:hover {
+        background-color: #2891b4;
+        
+      }
+      button:active{
+        transform: rotate(5deg);
+        animation: 0.5s ease-in ;
+
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      li {
+        margin: 5px 0;
+      }
+      /* #result{
+        background-color: rgba(231, 73, 73, 0.344);
+        
+      } */
+    </style>
+  </head>
+  <body>
+    <h1>Basic Calculator & Generate Prime and Square Numbers</h1>
+    <div class="container">
+      <div class="section">
+        <h2>Square Numbers</h2>
+        <label for="squareLimit">Generate square numbers up to:</label>
+        <input type="number" id="squareLimit" />
+        <button onclick="generateSquareNumbers()">Generate Square Numbers</button>
+        <ul id="squareList"></ul>
+      </div>
+      <div class="section">
+        <h2>Prime Numbers</h2>
+        <label for="primeLimit">Generate prime numbers up to:</label>
+        <input type="number" id="primeLimit" />
+        <button onclick="generatePrimeNumbers()">Generate Prime Numbers</button>
+        <ul id="primeList"></ul>
+      </div>
+      <div class="section">
+        <h2>Promise Calculator</h2>
+        <label for="num1">Number 1:</label>
+        <input type="number" id="num1" />
+        <br>
+        <label for="num2">Number 2:</label>
+        <input type="number" id="num2" />
+        <br>
+        <label for="operation">Operation:</label>
+        <input type="text" id="operation" />
+        <br>
+        <button onclick="calculate()">Calculate</button>
+        <p id="result"></p>
+      </div>
+    </div>
+
+    <script>
+      // Square Generator
+      function* squareGenerator(limit) {
+        for (let num = 1; num <= limit; num++) {
+          yield num * num;
+        }
+      }
+
+      function generateSquareNumbers() {
+        const squareLimit = parseInt(document.getElementById("squareLimit").value);
+        const squareList = document.getElementById("squareList");
+        squareList.innerHTML = ""; // Clear previous list items
+
+        for (const square of squareGenerator(squareLimit)) {
+          const listItem = document.createElement("li");
+          listItem.textContent = square;
+          squareList.appendChild(listItem);
+        }
+      }
+
+      // Prime Generator
+      function* primeGenerator(limit) {
+        for (let num = 2; num <= limit; num++) {
+          let isPrime = true;
+          for (let i = 2; i <= Math.sqrt(num); i++) {
+            if (num % i === 0) {
+              isPrime = false;
+              break;
+            }
+          }
+          if (isPrime) {
+            yield num;
+          }
+        }
+      }
+
+      function generatePrimeNumbers() {
+        const primeLimit = parseInt(document.getElementById("primeLimit").value);
+        const primeList = document.getElementById("primeList");
+        primeList.innerHTML = ""; // Clear previous list items
+
+        for (const prime of primeGenerator(primeLimit)) {
+          const listItem = document.createElement("li");
+          listItem.textContent = prime;
+          primeList.appendChild(listItem);
+        }
+      }
+
+      // Promise Calculator
+      function performCalculation(num1, num2, operation) {
+        return new Promise((resolve, reject) => {
+          if (isNaN(num1) || isNaN(num2)) {
+            reject("Please enter valid numbers.");
+          } else {
+            switch (operation) {
+              case "+":
+                resolve(num1 + num2);
+                break;
+              case "-":
+                resolve(num1 - num2);
+                break;
+              case "*":
+                resolve(num1 * num2);
+                break;
+              case "/":
+                if (num2 === 0) {
+                  reject("Division by zero is not allowed.");
+                } else {
+                  resolve(num1 / num2);
+                }
+                break;
+              default:
+                reject("Invalid operation. Use +, -, *, or /");
+            }
+          }
+        });
+      }
+
+      function calculate() {
+        const num1 = parseFloat(document.getElementById("num1").value);
+        const num2 = parseFloat(document.getElementById("num2").value);
+        const operation = document.getElementById("operation").value;
+        const resultElement = document.getElementById("result");
+
+        performCalculation(num1, num2, operation)
+          .then((result) => {
+            resultElement.textContent = `Result: ${result}`;
+          })
+          .catch((error) => {
+            resultElement.textContent = `Error: ${error}`;
+          });
+      }
+    </script>
+  </body>
+</html>
